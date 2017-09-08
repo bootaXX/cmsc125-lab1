@@ -67,11 +67,20 @@ class Generator:
                 resource.setuser(None)
                 resource.settime(0)
 
+        for waiter in self.waiting_list:
+            flag = False
+            while flag:
+                f = random.choice(self.resources)
+                if f.user == None:
+                    f.setuser(waiter)
+                    f.settime(random.randint(1,30))
+                    flag = True
+
         # randomly place if no user, get head of waiting list, give random time
-        for resource in self.resources:
-            if resource.user == None and self.waiting_list:
-                resource.setuser(self.waiting_list.pop(0))
-                resource.settime(random.randint(1,30))
+        # for resource in self.resources:
+        #     if resource.user == None and self.waiting_list:
+        #         resource.setuser(self.waiting_list.pop(0))
+        #         resource.settime(random.randint(1,30))
         
         # time-=1
         for resource in self.resources:
