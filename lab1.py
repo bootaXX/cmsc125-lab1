@@ -1,4 +1,7 @@
-import random, time, os
+import random
+import time
+import os
+
 
 class User:
     def __init__(self, name):
@@ -23,6 +26,7 @@ class Resource:
     def setuser(self, u):
         self.user = u
 
+
 class Generator:
     def __init__(self):
         self.users = []
@@ -31,16 +35,20 @@ class Generator:
 
     # generators-----------------------------------------------------------------------------------
     def generateUsers(self):
-        a = random.randint(1,30)
-        for x in xrange(1,a):
+        a = random.randint(1, 30)
+        while a == 0:
+            a = random.randint(1, 30)
+        for x in xrange(1, a):
             u = User(str(x))
             self.users.append(u)
 
     def generateResources(self):
-        a = random.randint(1,30)
-        for x in xrange(1,a):
+        a = random.randint(1, 30)
+        while a == 0:
+            a = random.randint(1, 30)
+        for x in xrange(1, a):
             u = Resource(str(x))
-            self.resources.append(u)   
+            self.resources.append(u)
 
     # assigner/werker-----------------------------------------------------------------------------------
     def assignUsers(self):
@@ -53,7 +61,7 @@ class Generator:
                 u = random.choice(user_list)
                 user_list.remove(u)
                 resource.setuser(u)
-                resource.settime(random.randint(1,30))
+                resource.settime(random.randint(1, 30))
 
         if user_list:
             for user in user_list:
@@ -67,21 +75,12 @@ class Generator:
                 resource.setuser(None)
                 resource.settime(0)
 
-        for waiter in self.waiting_list:
-            flag = False
-            while flag:
-                f = random.choice(self.resources)
-                if f.user == None:
-                    f.setuser(waiter)
-                    f.settime(random.randint(1,30))
-                    flag = True
-
         # randomly place if no user, get head of waiting list, give random time
-        # for resource in self.resources:
-        #     if resource.user == None and self.waiting_list:
-        #         resource.setuser(self.waiting_list.pop(0))
-        #         resource.settime(random.randint(1,30))
-        
+        for resource in self.resources:
+            if resource.user == None and self.waiting_list:
+                resource.setuser(self.waiting_list.pop(0))
+                resource.settime(random.randint(1, 30))
+
         # time-=1
         for resource in self.resources:
             if resource.user != None:
@@ -90,6 +89,7 @@ class Generator:
     # printers-----------------------------------------------------------------------------------
     def showResources(self):
         print("Show Resources")
+        print("---------------------------------------")
         for resource in self.resources:
             if resource.user == None:
                 print(resource.name + " : None")
@@ -106,21 +106,22 @@ class Generator:
         for waiter in self.waiting_list:
             waiter.sayname()
 
+
 def main():
     g = Generator()
     g.generateUsers()
     g.generateResources()
     g.assignUsers()
-    z=60
+    z = 120
 
-    while z>0:
+    while z > 0:
         g.showResources()
         print("---------------------------------------")
         g.showWaitingList()
         print("---------------------------------------")
-        print("Timer")
+        print("Simulation")
         print(z)
-        z-=1
+        z -= 1
 
         g.werk()
 
