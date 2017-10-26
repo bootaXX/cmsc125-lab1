@@ -70,20 +70,20 @@ class Generator:
     def werk(self):
         # check if time is zero, put to waiting list
         for resource in self.resources:
-            if resource.user != None and resource.time == 0:
+            if resource.user is not None and resource.time == 0:
                 self.waiting_list.append(resource.user)
                 resource.setuser(None)
                 resource.settime(0)
 
         # randomly place if no user, get head of waiting list, give random time
         for resource in self.resources:
-            if resource.user == None and self.waiting_list:
+            if resource.user is None and self.waiting_list:
                 resource.setuser(self.waiting_list.pop(0))
                 resource.settime(random.randint(1, 30))
 
         # time-=1
         for resource in self.resources:
-            if resource.user != None:
+            if resource.user is not None:
                 resource.settime(resource.time-1)
 
     # printers-----------------------------------------------------------------------------------
@@ -91,10 +91,11 @@ class Generator:
         print("Show Resources")
         print("---------------------------------------")
         for resource in self.resources:
-            if resource.user == None:
+            if resource.user is None:
                 print(resource.name + " : None")
             else:
-                print(resource.name + " : " + resource.user.name + " : " + str(resource.time))
+                print(resource.name + " : " + resource.user.name + " : " +
+                      str(resource.time))
 
     def showUsers(self):
         print("Show Users")
